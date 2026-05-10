@@ -12,6 +12,7 @@ import android.speech.SpeechRecognizer;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -138,8 +139,8 @@ public class VoiceInputHandler {
         View overlayView = inflater.inflate(R.layout.view_voice_input_overlay, null);
 
         mOverlay = new PopupWindow(overlayView,
-            PopupWindow.LayoutParams.WRAP_CONTENT,
-            PopupWindow.LayoutParams.WRAP_CONTENT, true);
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT, true);
         mOverlay.setAnimationStyle(android.R.style.Animation_Toast);
 
         View rootView = mActivity.findViewById(android.R.id.content);
