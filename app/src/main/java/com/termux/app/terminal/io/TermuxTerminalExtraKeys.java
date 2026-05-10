@@ -28,6 +28,10 @@ public class TermuxTerminalExtraKeys extends TerminalExtraKeys {
     final TermuxTerminalViewClient mTermuxTerminalViewClient;
     final TermuxTerminalSessionActivityClient mTermuxTerminalSessionActivityClient;
 
+    private VoiceInputHandler mVoiceInputHandler;
+    private ImageInputHandler mImageInputHandler;
+    private FileBrowserHelper mFileBrowserHelper;
+
     private static final String LOG_TAG = "TermuxTerminalExtraKeys";
 
     public TermuxTerminalExtraKeys(TermuxActivity activity, @NonNull TerminalView terminalView,
@@ -100,9 +104,46 @@ public class TermuxTerminalExtraKeys extends TerminalExtraKeys {
             TerminalView terminalView = mTermuxTerminalViewClient.getActivity().getTerminalView();
             if (terminalView != null && terminalView.mEmulator != null)
                 terminalView.mEmulator.toggleAutoScrollDisabled();
+        } else if ("VOICE".equals(key)) {
+            TerminalView terminalView = mTermuxTerminalViewClient.getActivity().getTerminalView();
+            if (mVoiceInputHandler != null && terminalView != null) {
+                mVoiceInputHandler.startListening(terminalView.getCurrentSession());
+            }
+        } else if ("IMAGE".equals(key)) {
+            TerminalView terminalView = mTermuxTerminalViewClient.getActivity().getTerminalView();
+            if (mImageInputHandler != null && terminalView != null) {
+                mImageInputHandler.pickImage(terminalView.getCurrentSession());
+            }
+        } else if ("CAMERA".equals(key)) {
+            TerminalView terminalView = mTermuxTerminalViewClient.getActivity().getTerminalView();
+            if (mImageInputHandler != null && terminalView != null) {
+                mImageInputHandler.captureImage(terminalView.getCurrentSession());
+            }
+        } else if ("FILE".equals(key)) {
+            TerminalView terminalView = mTermuxTerminalViewClient.getActivity().getTerminalView();
+            if (mImageInputHandler != null && terminalView != null) {
+                mImageInputHandler.pickFile(terminalView.getCurrentSession());
+            }
+        } else if ("FILES".equals(key)) {
+            TerminalView terminalView = mTermuxTerminalViewClient.getActivity().getTerminalView();
+            if (mFileBrowserHelper != null && terminalView != null) {
+                mFileBrowserHelper.show(terminalView.getCurrentSession());
+            }
         } else {
             super.onTerminalExtraKeyButtonClick(view, key, ctrlDown, altDown, shiftDown, fnDown);
         }
+    }
+
+    public void setVoiceInputHandler(VoiceInputHandler handler) {
+        mVoiceInputHandler = handler;
+    }
+
+    public void setImageInputHandler(ImageInputHandler handler) {
+        mImageInputHandler = handler;
+    }
+
+    public void setFileBrowserHelper(FileBrowserHelper helper) {
+        mFileBrowserHelper = helper;
     }
 
 }

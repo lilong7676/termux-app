@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -31,6 +32,9 @@ import com.termux.app.api.file.FileReceiverActivity;
 import com.termux.app.terminal.TermuxActivityRootView;
 import com.termux.app.terminal.TermuxTerminalSessionActivityClient;
 import com.termux.app.terminal.io.TermuxTerminalExtraKeys;
+import com.termux.app.terminal.io.FileBrowserHelper;
+import com.termux.app.terminal.io.ImageInputHandler;
+import com.termux.app.terminal.io.VoiceInputHandler;
 import com.termux.shared.activities.ReportActivity;
 import com.termux.shared.activity.ActivityUtils;
 import com.termux.shared.activity.media.AppCompatActivityUtils;
@@ -132,6 +136,21 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
      * The client for the {@link #mExtraKeysView}.
      */
     TermuxTerminalExtraKeys mTermuxTerminalExtraKeys;
+
+    /**
+     * The handler for voice input via the VOICE extra key.
+     */
+    VoiceInputHandler mVoiceInputHandler;
+
+    /**
+     * The handler for image input via the IMAGE/CAMERA/FILE extra keys.
+     */
+    ImageInputHandler mImageInputHandler;
+
+    /**
+     * Helper for file browser via the FILES extra key.
+     */
+    FileBrowserHelper mFileBrowserHelper;
 
     /**
      * The termux sessions list controller.
@@ -250,6 +269,15 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         setNewSessionButtonView();
 
         setToggleKeyboardView();
+
+        mVoiceInputHandler = new VoiceInputHandler(this);
+        mImageInputHandler = new ImageInputHandler(this);
+        mFileBrowserHelper = new FileBrowserHelper(this);
+        if (mTermuxTerminalExtraKeys != null) {
+            mTermuxTerminalExtraKeys.setVoiceInputHandler(mVoiceInputHandler);
+            mTermuxTerminalExtraKeys.setImageInputHandler(mImageInputHandler);
+            mTermuxTerminalExtraKeys.setFileBrowserHelper(mFileBrowserHelper);
+        }
 
         registerForContextMenu(mTerminalView);
 
@@ -795,6 +823,12 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         Logger.logVerbose(LOG_TAG, "onActivityResult: requestCode: " + requestCode + ", resultCode: "  + resultCode + ", data: "  + IntentUtils.getIntentString(data));
         if (requestCode == PermissionUtils.REQUEST_GRANT_STORAGE_PERMISSION) {
             requestStoragePermission(true);
+        } else if (requestCode == ImageInputHandler.REQUEST_IMAGE_PICK
+            || requestCode == ImageInputHandler.REQUEST_IMAGE_CAPTURE
+            || requestCode == ImageInputHandler.REQUEST_IMAGE_FILE) {
+            if (mImageInputHandler != null) {
+                mImageInputHandler.handleActivityResult(requestCode, resultCode, data);
+            }
         }
     }
 
@@ -804,6 +838,13 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         Logger.logVerbose(LOG_TAG, "onRequestPermissionsResult: requestCode: " + requestCode + ", permissions: "  + Arrays.toString(permissions) + ", grantResults: "  + Arrays.toString(grantResults));
         if (requestCode == PermissionUtils.REQUEST_GRANT_STORAGE_PERMISSION) {
             requestStoragePermission(true);
+        } else if (requestCode == VoiceInputHandler.REQUEST_RECORD_AUDIO) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                TerminalSession session = getCurrentSession();
+                if (session != null && mVoiceInputHandler != null) {
+                    mVoiceInputHandler.startListening(session);
+                }
+            }
         }
     }
 

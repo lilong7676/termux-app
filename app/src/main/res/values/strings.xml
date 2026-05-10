@@ -232,6 +232,10 @@
     <!-- About Preference -->
     <string name="about_preference_title">About</string>
 
+    <!-- Voice input -->
+    <string name="voice_listening">Speak now…</string>
+    <string name="voice_not_available">Voice recognition not available. Please install Google Voice Search.</string>
+
     <!-- Donate Preference -->
     <string name="donate_preference_title">Donate</string>
 

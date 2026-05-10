@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:minHeight="400dp"
+    android:background="?android:attr/colorBackground"
+    android:paddingTop="8dp">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/browser_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="File Browser"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/browser_close"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:text="✕"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
+    </LinearLayout>
+
+    <!-- Path bar -->
+    <TextView
+        android:id="@+id/browser_path"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp"
+        android:textSize="13sp"
+        android:textColor="?android:attr/textColorSecondary"
+        android:maxLines="1"
+        android:ellipsize="start"
+        android:fontFamily="monospace" />
+
+    <!-- File list -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/file_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Quick access bar -->
+    <LinearLayout
+        android:id="@+id/quick_access"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="8dp"
+        android:divider="?android:attr/dividerVertical"
+        android:showDividers="middle">
+
+        <TextView
+            android:id="@+id/qa_up"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="⬆ .."
+            android:gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/qa_home"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="🏠 ~"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/qa_sdcard"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="💾 SD"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/qa_root"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="/"
+            android:gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
